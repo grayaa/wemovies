@@ -66,6 +66,7 @@ $(document).ready(function() {
         var query = $(this).val();
         var autocompleteResults = $('#autocomplete-results');
         if (query.length >= 3) {
+            autocompleteResults.show();
             $.ajax({
                 url: '/ajax_autocomplete',
                 method: 'GET',
