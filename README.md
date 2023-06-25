@@ -21,7 +21,8 @@ Before running the Symfony app, make sure you have the following:
 ```bash
 git clone https://github.com/grayaa/wemovies.git
 ```
-2. Install the dependencies using Composer:
+2. Install the dependencies using Composer: => use the `composer` binary installed
+   on your computer to run these commands [Download Composer](https://getcomposer.org/):
 
 ```bash
 cd wemovies/
@@ -33,8 +34,14 @@ composer install
 ```bash
 cp .env.example .env
 ```
-4. Launch the Symfony local server:
+4. Launch the Symfony local server, use the `symfony` binary installed
+   on your computer to run this command [Symfony CLI](https://symfony.com/download):
 
 ```bash
 symfony server:start
 ```
+=== Alternatively you can use default php server ===
+```bash
+php -S localhost:8000 -t public/
+```
+Then access the application in your browser at the given URL (http://localhost:8000 by default).
