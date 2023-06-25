@@ -1,0 +1,37 @@
+{% for movie in movies %}
+    <div class="col-md-3">
+        <div class="card">
+            {% if movie.poster_path is not null %}
+                <img data-bs-target="#popup-movie" data-movie="{{ movie.id }}" data-bs-toggle="modal" class="card-img-top js-load-movie-content" src="https://image.tmdb.org/t/p/w200/{{ movie.poster_path }}" alt="Card image cap">
+            {% else %}
+                <img data-bs-target="#popup-movie" data-bs-toggle="modal" class="card-img-top" src="{{ asset('img/placeholder.png') }}" alt="Card image cap">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title" title="{{ movie.title }}">{{ movie.title | u.truncate(30) }}</h5>
+                <p class="card-text">{{ movie.overview | u.truncate(100)  }}</p>
+                <hr>
+                <h6 class="review-stat">Rating: </h6>
+                <div class="small-ratings">
+                    {% set rating = movie.vote_average %}
+                    {% set maxStars = 5 %}
+                    {% set fullStars = rating / 2 %}
+                    {% for i in 1..maxStars %}
+                        {% if i <= fullStars %}
+                            <i class="fa-solid fa-star"></i>
+                        {% elseif i - 0.5 <= fullStars %}
+                            <i class="fa-solid fa-star-half-alt"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <hr>
+                <button data-movie="{{ movie.id }}" data-bs-target="#popup-movie" data-bs-toggle="modal" class="btn btn-primary js-load-movie-content">Details</button>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+<!-- Modal -->
+{% include 'includes/movie-modal-wrapper.html.twig' %}
+
+{{ knp_pagination_render(pagination) }}

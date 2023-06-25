@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+    <header class="masthead">
+        <div class="main">
+            <div class="slider slider-for">
+                {% for movie in trendingMovies |slice(0, 6) %}
+                    <div>
+                        <div class="video-container">
+                            <div class="video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/{{ movie["videos"]["results"][0].key }}?controls=0&showinfo=0&rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="container">
+                <div class="slider slider-nav">
+                    {% for movie in trendingMovies |slice(0, 6) %}
+                        <div>
+                            <img src="https://image.tmdb.org/t/p/w400/{{ movie.poster_path }}" alt="{{ movie.title }}">
+                            <h3>{{ movie.title }}</h3>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="row">
+            <aside class="col-sm-3">
+                <div class="card">
+                    <article class="card-group-item">
+                        <header class="card-header">
+                            <h6 class="title">Best movie of the week</h6>
+                        </header>
+                        <div class="fbest-movie">
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="card">
+{#                                     <img class="card-img-top" src="https://image.tmdb.org/t/p/w400/{{ trendingMovie.poster_path }}" alt="Card image cap">#}
+                                        <div class="video-container">
+                                            <div class="video-wrapper">
+                                                <iframe src="https://www.youtube.com/embed/{{ trendingMovie["videos"]["results"][0].key }}" frameborder="0" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ trendingMovie.title }}</h5>
+                                            <p class="card-text">{{ trendingMovie.overview | u.truncate(100)  }}</p>
+                                            <button data-movie="{{ trendingMovie.id }}" data-bs-target="#popup-movie" data-bs-toggle="modal" class="btn btn-primary js-load-movie-content">Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% include 'includes/movie-modal-wrapper.html.twig' %}
+
+                            </div> <!-- card-body.// -->
+                        </div>
+                    </article> <!-- card-group-item.// -->
+                    <article class="card-group-item">
+                        <header class="card-header">
+                            <h6 class="title">Genres </h6>
+                        </header>
+                        <div class="filter-content">
+                            <div class="card-body">
+                                {% for genre in genres %}
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="genre" class="genre" id="{{ genre.id }}">
+                                        <label class="custom-control-label" for="{{ genre.id }}">{{ genre.name }}</label>
+                                    </div> <!-- form-check.// -->
+                                {% endfor %}
+                            </div> <!-- card-body.// -->
+                        </div>
+                    </article> <!-- card-group-item.// -->
+                </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+            <div class="col-md-8">
+                <div class="row movies">
+                    {% include 'includes/movies.html.twig' with {'movies': movies} %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="overlay">
+        <div class="cv-spinner">
+            <span class="spinner"></span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+    <script>
+        //Genres Ajax Filter
+        $(document).ready(function() {
+            // Load selected genres from localStorage
+            var selectedGenres = localStorage.getItem('selectedGenres') ? JSON.parse(localStorage.getItem('selectedGenres')) : [];
+
+            // Update the checked state of genre checkboxes based on the loaded genres
+            $('.genre').each(function() {
+                var genreId = $(this).attr('id');
+                if (selectedGenres.includes(genreId)) {
+                    $(this).prop('checked', true);
+                }
+            });
+
+            $('.genre').on('change', function() {
+                selectedGenres = [];
+                $('.genre:checked').each(function() {
+                    selectedGenres.push($(this).attr('id'));
+                });
+                console.log(selectedGenres);
+
+                // Save selected genres to localStorage
+                localStorage.setItem('selectedGenres', JSON.stringify(selectedGenres));
+
+                $.ajax({
+                    url: '{{ path('get_by_genres') }}',
+                    method: 'POST',
+                    data: { genres: selectedGenres },
+                    success: function(response) {
+                        $(".movies").html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        $("#overlay").fadeOut(300);
+                    }
+                }).done(function() {
+                    setTimeout(function(){
+                        $("#overlay").fadeOut(300);
+                    }, 500);
+                });
+            });
+        });
+    </script>
+
+{% endblock %}
