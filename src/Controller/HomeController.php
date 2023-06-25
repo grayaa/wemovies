@@ -126,7 +126,7 @@ class HomeController extends AbstractController
 
     }
 
-    #[Route('/autocomplete', name: 'autocomplete')]
+    #[Route('/ajax_autocomplete', name: 'autocomplete')]
     public function autocomplete(Request $request): JsonResponse
     {
         $query = $request->query->get('query');

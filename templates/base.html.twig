@@ -6,145 +6,19 @@
     <title>{% block title %}We Movies{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.png') }}">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
-    <!-- Fontawesome CSS -->
+    {{ encore_entry_link_tags('app') }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{ asset('slick/css/slick.css') }}">
-    <link rel="stylesheet" href="{{ asset('slick/css/slick-theme.css') }}">
+
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">
-            <img width="250" src="{{ asset('img/wemovies.png') }}" alt="...">
-        </a>
-        <div class="navbar-nav-scroll">
-            <ul class="navbar-nav bd-navbar-nav flex-row">
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('app_home') }}">Home</a>
-                </li>
-            </ul>
-        </div>
-        <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-            <form class="form-inline my-2 my-lg-0">
-                <input type="text" id="search-input" class="form-control mr-sm-2" name="query" placeholder="Search movies..." />
-                <div id="autocomplete-results"></div>
-            </form>
-        </div>
-    </div>
-</nav>
+{% include 'includes/nav-menu.html.twig' %}
 <div class="main-content">
     {% block body %}
     {% endblock %}
 </div>
-<!-- Copyright -->
-<div class="footer-copyright py-3">
-    <div class="container">
-        <div class="credit">
-            <span>Created with <i class="fa fa-heart"></i> By &nbsp;</span> <a class="float-end" href="https://www.linkedin.com/in/grayaahammed/" target="_blank"> Grayaa Hammed</a>
-        </div>
-        <span>© 2023 Copyright:</span>
-    </div>
-</div>
-<!-- Copyright -->
+{% include 'includes/footer.html.twig' %}
 {% block script %}
-    <script src="{{ asset('js/jquery-3.7.0.min.js') }}"></script>
-    <!-- Bootstrap JS -->
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('slick/js/slick.min.js') }}"></script>
-    <script>
-        $(document).ajaxSend(function() {
-            $("#overlay").fadeIn(300);
-        });
-        //Auto Complete search
-        $(document).ready(function() {
-            $('#search-input').on('input', function() {
-                var query = $(this).val();
-
-                if (query.length >= 3) {
-                    $.ajax({
-                        url: '{{ path('autocomplete') }}',
-                        method: 'GET',
-                        data: { query: query },
-                        success: function(response) {
-                            var movies = response.results;
-                            var autocompleteResults = $('#autocomplete-results');
-                            autocompleteResults.empty();
-
-                            $.each(movies, function(index, movie) {
-                                var title = movie.title;
-                                var id = movie.id;
-                                var image = movie.image;
-                                var imageUrl = image ? 'https://image.tmdb.org/t/p/w200/' + image : '{{ asset('img/placeholder.png') }}';
-
-                                var movieUrl = '{{ path("movie_details", {"id": "movieId"}) }}';
-                                console.log(movieUrl);
-                                movieUrl = movieUrl.replace('movieId', id);
-
-                                var resultItem = '<a href="' + movieUrl + '" class="result-item">' +
-                                    '<img src="' + imageUrl + '" alt="' + title + '">' +
-                                    '<p>' + title + '</p>' +
-                                    '</a>';
-
-                                autocompleteResults.append(resultItem);
-                            });
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            $("#overlay").fadeOut(300);
-                        }
-                    }).done(function() {
-                        setTimeout(function(){
-                            $("#overlay").fadeOut(300);
-                        }, 500);
-                    });;
-                }
-            });
-        });
-
-        //Load Modal with content
-        $(document).ready(function() {
-            $(document).on('click', '.js-load-movie-content', function() {
-                $('#popup-movie .modal-dialog').html("");
-                var movieId = $(this).data('movie');
-                 $.ajax({
-                    url: '{{ path('load_movie_modal') }}',
-                    method: 'POST',
-                    data: { id: movieId },
-                    success: function(response) {
-                        var movieModal = response;
-                        $('#popup-movie .modal-dialog').html(movieModal);
-                        $('#popup-movie').modal('show');
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle the error
-                    }
-                }).done(function() {
-                    setTimeout(function(){
-                        $("#overlay").fadeOut(300);
-                    }, 500);
-                });
-            });
-        });
-
-        //Reset modal content to stop Youtube Video
-        $('#popup-movie').on('hide.bs.modal', function () {
-            $('#popup-movie .modal-dialog').html("");
-            $('#popup-movie').hide();
-
-        });
-    </script>
-
-    <!-- Custom JS -->
-    <script src="{{ asset('js/custom.js') }}"></script>
-
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}
 
 </body>

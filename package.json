@@ -1,0 +1,43 @@
+{
+  "name": "wemovies",
+  "version": "1.0.0",
+  "description": "This is a simple Symfony 5.4 application that uses the Movie Database API to display movies information.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "encore dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grayaa/wemovies.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grayaa/wemovies/issues"
+  },
+  "homepage": "https://github.com/grayaa/wemovies#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.0",
+    "jquery": "3.7.0",
+    "node-sass": "^6.0.1",
+    "popper.js": "^1.16.1",
+    "slick-carousel": "^1.8.1",
+    "webpack": "^5.88.0"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "@symfony/webpack-encore": "^1.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.8.1",
+    "file-loader": "^6.2.0",
+    "sass": "^1.63.6",
+    "sass-loader": "^12.0.0",
+    "style-loader": "^3.3.3",
+    "webpack-notifier": "^1.8.0"
+  }
+}

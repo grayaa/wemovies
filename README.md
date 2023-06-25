@@ -12,8 +12,9 @@ You can find the documentation for the Movie Database API at the following link:
 Before running the Symfony app, make sure you have the following:
 
 - PHP 7.4 or higher
-- Composer
+- [Composer](https://getcomposer.org/)
 - [Symfony CLI](https://symfony.com/download)
+- [NodeJs](https://nodejs.org/en/download)
 ## Installation
 
 1. Clone the repository:
@@ -29,11 +30,13 @@ cd wemovies/
 composer install
 ```
 
-3. Set up the .env file in root directory:
+3. Install resources dependencies using  npm:  [Download NodeJs](https://nodejs.org/en/download):
 
 ```bash
-cp .env.example .env
+npm install
+npm run build
 ```
+
 4. Launch the Symfony local server, use the `symfony` binary installed
    on your computer to run this command [Symfony CLI](https://symfony.com/download):
 
